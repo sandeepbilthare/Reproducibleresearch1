@@ -47,7 +47,7 @@ hist(daily_steps$mean_steps, main = "Historgram of of the total number of steps 
 
 ```
 
-Mean and median of the total number of steps taken per day is `mean_daily_steps` and `median_daily_steps` respectively.
+Mean and median of the total number of steps taken per day are `r mean_daily_steps` and `r median_daily_steps` respectively.
 
 
 
@@ -68,7 +68,7 @@ with(mean_steps_mins, plot(interval, mean_steps, type = "l", main = "Average num
 max_steps_interval <- mean_steps_mins$interval[which(mean_steps_mins$mean_steps == max(mean_steps_mins$mean_steps))]
 ```
 
-5-minute interval with id `max_steps_interval` contains the maximum number of steps on average across all the days in the dataset.
+5-minute interval with id `r max_steps_interval` contains the maximum number of steps on average across all the days in the dataset.
 
 
 
@@ -139,13 +139,18 @@ mean_steps_mins_updated <- activity_updated %>%
                       group_by(day, interval) %>% 
                       summarise(mean_steps = mean(steps, na.rm = TRUE))
 
+# Let's look at the mean steps taken during weekdays and weekends to see if there is any difference in activity as a whole
+activity_updated %>% 
+  group_by(day) %>% 
+  summarize(mean_steps = mean(steps, na.rm = TRUE))
+
 
 # 2. Make a panel plot containing a time series plot (i.e. type = "l"type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
 
 par(mfrow=c(2,1))
-with(mean_steps_mins_updated, plot(interval, mean_steps, type="n"))
-with(mean_steps_mins_updated[mean_steps_mins_updated$day == "weekday",], plot(interval, mean_steps, type="l", col="red"))
-with(mean_steps_mins_updated[mean_steps_mins_updated$day == "weekend",], plot(interval, mean_steps, type="l", col="blue"))
+# with(mean_steps_mins_updated, plot(interval, mean_steps, type="n"))
+with(mean_steps_mins_updated[mean_steps_mins_updated$day == "weekday",], plot(interval, mean_steps, type="l", col="red", ylab = "mean steps", main="mean steps per day during weekdays"))
+with(mean_steps_mins_updated[mean_steps_mins_updated$day == "weekend",], plot(interval, mean_steps, type="l", col="blue", ylab = "mean steps", main="mean steps per day during weekends"))
 
 
 

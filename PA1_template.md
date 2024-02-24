@@ -64,9 +64,9 @@ median_daily_steps <- median(daily_steps$mean_steps)
 hist(daily_steps$mean_steps, main = "Historgram of of the total number of steps taken each day", xlab = "Daily steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png)
 
-Mean and median of the total number of steps taken per day is `mean_daily_steps` and `median_daily_steps` respectively.
+Mean and median of the total number of steps taken per day are 9354.2295082 and 10395 respectively.
 
 
 
@@ -84,7 +84,7 @@ mean_steps_mins <- activity %>%
 with(mean_steps_mins, plot(interval, mean_steps, type = "l", main = "Average number of steps in each 5 mins interval", ylab = "average number of steps"))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png)
 
 ```r
 # 2. Find out which 5-minute interval contains the maximum number of steps on average across all the days in the dataset.
@@ -92,7 +92,7 @@ with(mean_steps_mins, plot(interval, mean_steps, type = "l", main = "Average num
 max_steps_interval <- mean_steps_mins$interval[which(mean_steps_mins$mean_steps == max(mean_steps_mins$mean_steps))]
 ```
 
-5-minute interval with id `max_steps_interval` contains the maximum number of steps on average across all the days in the dataset.
+5-minute interval with id 835 contains the maximum number of steps on average across all the days in the dataset.
 
 
 
@@ -144,7 +144,13 @@ median_daily_steps_updated <- median(daily_steps_updated$mean_steps)
 
 
 library(ggplot2)
+```
 
+```
+## Need help getting started? Try the R Graphics Cookbook: https://r-graphics.org
+```
+
+```r
 ggplot(data=daily_steps_updated, aes(x=mean_steps)) +
   geom_histogram(binwidth=500, fill="blue", color="black") +
   geom_vline(aes(xintercept=mean_daily_steps), color="red", linetype="dashed") +  geom_vline(aes(xintercept=median_daily_steps), color="blue", linetype="dashed") +
@@ -152,7 +158,7 @@ ggplot(data=daily_steps_updated, aes(x=mean_steps)) +
   theme_minimal()
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png)
 
 
 
@@ -170,22 +176,31 @@ mean_steps_mins_updated <- activity_updated %>%
 ```
 
 ```
-## `summarise()` has grouped output by 'day'. You can override using the `.groups`
-## argument.
+## `summarise()` has grouped output by 'day'. You can override using the `.groups` argument.
+```
+
+```r
+# Let's look at the mean steps taken during weekdays and weekends to see if there is any difference in activity as a whole
+activity_updated %>% 
+  group_by(day) %>% 
+  summarize(mean_steps = mean(steps, na.rm = TRUE))
+```
+
+```
+## # A tibble: 2 × 2
+##   day     mean_steps
+##   <chr>        <dbl>
+## 1 weekday       35.6
+## 2 weekend       42.4
 ```
 
 ```r
 # 2. Make a panel plot containing a time series plot (i.e. type = "l"type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
 
 par(mfrow=c(2,1))
-with(mean_steps_mins_updated, plot(interval, mean_steps, type="n"))
-with(mean_steps_mins_updated[mean_steps_mins_updated$day == "weekday",], plot(interval, mean_steps, type="l", col="red"))
+# with(mean_steps_mins_updated, plot(interval, mean_steps, type="n"))
+with(mean_steps_mins_updated[mean_steps_mins_updated$day == "weekday",], plot(interval, mean_steps, type="l", col="red", ylab = "mean steps", main="mean steps per day during weekdays"))
+with(mean_steps_mins_updated[mean_steps_mins_updated$day == "weekend",], plot(interval, mean_steps, type="l", col="blue", ylab = "mean steps", main="mean steps per day during weekends"))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
-
-```r
-with(mean_steps_mins_updated[mean_steps_mins_updated$day == "weekend",], plot(interval, mean_steps, type="l", col="blue"))
-```
-
-![](PA1_template_files/figure-html/unnamed-chunk-5-2.png)<!-- -->
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
